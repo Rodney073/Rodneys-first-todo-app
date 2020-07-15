@@ -17,21 +17,28 @@
     <input type="text" id="title" name="todo" th:value="${todo.title}"/>
     <br/>
 
-    <label>Urgent</label>
-    <select name="urgent">
-        <option value=""></option>
-        <option value="true">Yes</option>
-        <option value="false">No</option>
-    </select>
+    <label for="urgent">Urgent</label>
+    <input type="checkbox" id="urgent" name="urgent" th:value="${todo.urgent}"/>
     <br/>
 
-    <label>Done</label>
-    <select name="done">
-        <option value=""></option>
-        <option value="true">Yes</option>
-        <option value="false">No</option>
-    </select>
+    <label for="done">Done</label>
+    <input type="checkbox" id="done" name="done" th:value="${todo.done}"/>
     <br/>
+
+
+    <!--    <label>Urgent</label>
+        <select name="urgent">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+        <br/>
+
+        <label>Done</label>
+        <select name="done">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+        <br/>-->
 
     <button type="submit">Update</button>
 </form>
