@@ -18,11 +18,11 @@
     <br/>
 
     <label for="urgent">Urgent</label>
-    <input type="checkbox" id="urgent" name="urgent" th:value="${todo.urgent}"/>
+    <input type="checkbox" id="urgent" name="urgent" th:value="${todo.isUrgent()}"/>
     <br/>
 
     <label for="done">Done</label>
-    <input type="checkbox" id="done" name="done" th:value="${todo.done}"/>
+    <input type="checkbox" id="done" name="done" th:value="${todo.isDone()}"/>
     <br/>
 
 
