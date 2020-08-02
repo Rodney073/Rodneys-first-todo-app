@@ -26,11 +26,11 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    @GetMapping("/todolist")
+    @GetMapping("/")
     public String todoList(Model model) {
         model.addAttribute("todos", todoRepository.findAll());
 
-        return "todolist";
+        return "index";
     }
 
 
@@ -44,7 +44,7 @@ public class TodoController {
             model.addAttribute("todos", todoRepository.findAll());
 
         }
-        return "todolist";
+        return "index";
     }
 
     @PostMapping("/add-todo")
@@ -53,7 +53,7 @@ public class TodoController {
         todoRepository.save(new Todo(todo));
         model.addAttribute("todos", todoRepository.findAll());
 
-        return "redirect:/todolist";
+        return "redirect:/";
     }
 
 
@@ -62,7 +62,7 @@ public class TodoController {
 
         todoRepository.deleteById(id);
         //model.addAttribute("todos", todoRepository.findAll());
-        return "redirect:/todolist";
+        return "redirect:/";
     }
 
     @GetMapping("/list")
@@ -90,16 +90,17 @@ public class TodoController {
     public String updateTodo(@PathVariable("id") Long id, @ModelAttribute Todo todo){
 
         logger.info("got here");
-        logger.info ("title is: "+todo.getTitle());
+        logger.info ("title is: "+todo.getTodo());
         logger.info ("done is: "+todo.isDone());
         logger.info ("urgent is: "+todo.isDone());
+        logger.info ("description is: "+todo.getDescription());
         //todoRepository.findTodoById(id).setTitle(todo.getTitle());
         //todoRepository.findTodoById(id).setUrgent(todo.isUrgent());
         //todoRepository.findTodoById(id).setDone(todo.isDone());
         todoRepository.save(todo);
         logger.info("finished update");
 
-        return "redirect:/todolist";
+        return "redirect:/";
     }
 
     @GetMapping("/search")
@@ -109,7 +110,7 @@ public class TodoController {
         logger.info ("keyword is: "+todoService.getTodoContainsKeyWord(keyword));
         model.addAttribute("todos", todoService.getTodoContainsKeyWord(keyword));
 
-        return "todolist";
+        return "index";
     }
 
 }

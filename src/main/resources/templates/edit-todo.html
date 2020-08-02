@@ -1,46 +1,74 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:disabled="http://www.w3.org/1999/xhtml">
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <meta charset="UTF-8">
     <title>Edit Todo</title>
+    <style>
+        body {
+            background-image: url(" https://c.wallhere.com/photos/34/d0/stick_glow_black_reflection_background_dark_night_energy-1054343.jpg!d");
+
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+        }
+        .card {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 25px;
+            width: 50%;
+        }
+    </style>
 </head>
 <body>
-<h1>Edit todo</h1>
+    <div class="card">
+        <form class="text-center border border-light p-5" th:action="'/update-todo/'+${todo.id}" method="post">
 
-<form th:action="'/update-todo/'+${todo.id}" method="post">
-
-    <label for="id">id</label>
-    <input type="text" id="id" name="id" th:value="${todo.id}"/>
-    <br/>
-
-    <label for="title">Title</label>
-    <input type="text" id="title" name="todo" th:value="${todo.title}"/>
-    <br/>
-
-<!--    <label for="urgent">Urgent</label>
-    <input type="checkbox" id="urgent" name="urgent" th:value="${todo.isUrgent()}"/>
-    <br/>
-
-    <label for="done">Done</label>
-    <input type="checkbox" id="done" name="done" th:value="${todo.isDone()}"/>
-    <br/>-->
+            <p class="h4 mb-4">Edit Todo</p>
 
 
-        <label>Urgent</label>
-        <select name="urgent">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <br/>
+            <label for="title">Title</label>
+            <input class="form-control mb-4" type="text" id="title" name="todo" th:value="${todo.todo}"/>
 
-        <label>Done</label>
-        <select name="done">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
-        <br/>
 
-    <button type="submit">Update</button>
-</form>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control rounded-0" id="description" name="description"
+                          th:field="${todo.description}"> </textarea>
+            </div>
+
+
+            <div class="custom-control custom-checkbox mb-4">
+                <input  id="urgent" type="checkbox" name="urgent" th:checked="${todo.urgent}" />
+                <label for="urgent" >Urgent</label>
+            </div>
+
+
+            <div class="custom-control custom-checkbox mb-4">
+                <input  id="done" type="checkbox" name="done" th:checked="${todo.done}" />
+                <label for="done" >Done</label>
+            </div>
+
+
+         <!--
+                <label>Urgent</label>
+                <select name="urgent">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <br/>
+
+                <label>Done</label>
+                <select name="done">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>-->
+
+
+            <button class="btn btn-info btn-block btn-primary btn-rounded" type="submit">Update</button>
+        </form>
+    </div>
 </body>
 </html>

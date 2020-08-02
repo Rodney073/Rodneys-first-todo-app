@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background-image: url(" https://c.wallhere.com/photos/34/d0/stick_glow_black_reflection_background_dark_night_energy-1054343.jpg!d");
+
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+        }
+        .card {
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 25px;
+        }
+
+        a {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+<h3 class="card-header text-center font-weight-bold text-uppercase py-4">My todo list</h3>
+    <div class="card-body">
+        <form action ="/search" >
+            <label for="keyword">Search for</label> <br/>
+            <input type="text" id="keyword" name="keyword" placeholder="Search Todo"/>
+            <button type="submit" value="Search" class="searchButton">Search</button>
+        </form>
+    </div>
+
+    <div class="card-body">
+        <form action="/add-todo" method="post">
+            <label for="todo">New todo</label> <br/>
+            <input type="text" id="todo" name="todo" placeholder="Type todo"/>
+            <button type="submit" value="add">Add</button>
+        </form>
+    </div>
+
+<div class="card-body">
+    <div id="table" class="table-editable">
+        <table class="table table-bordered table-responsive-md table-striped text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Urgent</th>
+                <th>Done</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:each=" todo : ${todos}">
+                <td th:text="${todo.getCreateDate()}"></td>
+                <td th:text="${todo.todo}"></td>
+                <td>
+                    <div class="col-xs-12">
+                        <div class="col-xs-2 text-center">
+                            <div class="checkbox checkbox-circle checkbox-black">
+                                <input type="checkbox" name="urgent" disabled="true" th:checked="${todo.urgent}" />
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xs-12">
+                        <div class="col-xs-2 text-center">
+                            <div class="checkbox checkbox-circle checkbox-black">
+                                <input type="checkbox" name="done" disabled="true" th:checked="${todo.done}" />
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td><button class="btn btn-info btn-rounded btn-sm my-0"><a th:href="'edit-todo/'+${todo.id}">Edit</a></button></td>
+                <td><button class="btn btn-info btn-rounded btn-sm my-0"><a th:href="'delete/'+${todo.id}" >Delete</a></button></td>
+            </tr>
+            </tbody>
+
+         <!--   <span class="table-up"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-up"
+                                                                       aria-hidden="true"></i></a></span>
+            <span class="table-down"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-down"
+                                                                         aria-hidden="true"></i></a></span>-->
+
+        </table>
+        <button class="btn btn-info btn-rounded btn-sm my-0"><a th:href="'/'" >Reset</a></button>
+    </div>
+</div>
+
+<br/>
+
+</div>
+</body>
+</html>

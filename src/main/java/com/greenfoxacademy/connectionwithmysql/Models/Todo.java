@@ -1,8 +1,19 @@
 package com.greenfoxacademy.connectionwithmysql.Models;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -10,52 +21,23 @@ public class Todo {
     private String todo;
     private boolean urgent;
     private boolean done;
+    private String description;
 
-    public Todo() {
-        todo = "Todo has not been specified";
-        this.urgent = false;
-        this.done = false;
-    }
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
 
     public Todo(String title) {
         this.todo = title;
         this.urgent = false;
         this.done = false;
+        this.description = "";
+        this.createDate = new Date();
     }
 
-    //Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.todo = title;
-    }
-
-    public void setUrgent(boolean urgent) {
-        this.urgent = urgent;
-    }
-
-    public void setDone(boolean done) {
-        this.done = done;
-    }
-
-
-    //Gettters
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return todo;
-    }
-
-    public boolean isUrgent() {
-        return urgent;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
 }
