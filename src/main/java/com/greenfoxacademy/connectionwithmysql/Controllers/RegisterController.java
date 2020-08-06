@@ -38,13 +38,13 @@ public class RegisterController {
             return "redirect:/register";
         }
         userRepository.save(user);
-        return "redirect:/?userid=" + user.getId();
+        return "redirect:/?user_id=" + user.getId();
     }
 
     @PostMapping("/signIn")
     public String signIn(@ModelAttribute User user) {
         if (userService.findUserByName(user.getName()).isPresent() && userService.isPasswordOk(user.getName(), user.getPassword())) {
-            return "redirect:/?userid=" +  userService.findUserByName(user.getName()).get().getId();
+            return "redirect:/?user_id=" +  userService.findUserByName(user.getName()).get().getId();
         }
         else if (userService.findUserByName(user.getName()).isPresent() && !userService.isPasswordOk(user.getName(), user.getPassword())) {
             signInMessage="Incorrect password";

@@ -35,8 +35,20 @@ public class TodoService {
         return todoRepository.findTodoById(id);
     }
 
-    public void addUser_IdToTheLatestAddedTodo() {
-        todoRepository.findTopByOrderByIdDesc().setUser(userService.findUserById(Integer.toUnsignedLong(1)));
+    public void addUser_IdToTheLatestAddedTodo(Long id) {
+        todoRepository.findTopByOrderByIdDesc().setUser(userService.findUserById(id));
+    }
+
+    public void findTodoByIdAndSetUserId (Long todo_id, Long user_id){
+        todoRepository.findTodoById(todo_id).setUser(userService.findUserById(user_id));
+    }
+
+    public void updateTodo(String title, String description, boolean urgent, boolean done, Todo todo) {
+        todo.setTodo(title);
+        todo.setDescription(description);
+        todo.setUrgent(urgent);
+        todo.setDone(done);
+        todoRepository.save(todo);
     }
 
 

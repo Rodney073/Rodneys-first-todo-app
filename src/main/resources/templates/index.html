@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Todo list</title>
     <style>
         body {
             background-image: url(" https://c.wallhere.com/photos/34/d0/stick_glow_black_reflection_background_dark_night_energy-1054343.jpg!d");
@@ -41,7 +41,11 @@
 <h3 class="card-header text-center font-weight-bold text-uppercase py-4">My todo list</h3>
 
     <div class="card-body">
-        <span class="table-add float-right mb-3 mr-2 helloUser"> <p th:text="'Hello '+${userName}+'!'"></p></span>
+        <span class="table-add float-right mb-3 mr-2 helloUser">
+            <p th:text="'Hello '+${userName}+'!'"></p>
+            <button class="btn btn-info btn-rounded btn-sm my-0"><a th:href="'/register'" >Change user</a></button>
+        </span>
+
     </div>
 
     <div class="card-body">
@@ -110,7 +114,7 @@
                                                                          aria-hidden="true"></i></a></span>-->
 
         </table>
-        <button class="btn btn-info btn-rounded btn-sm my-0"><a th:href="'/'" >Reset</a></button>
+        <button class="btn btn-info btn-rounded btn-sm my-0"><a th:href="'reset/'" >Reset</a></button>
     </div>
 </div>
 

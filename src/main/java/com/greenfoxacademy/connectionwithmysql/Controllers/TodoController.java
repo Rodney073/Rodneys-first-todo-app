@@ -21,6 +21,8 @@ public class TodoController {
     private final TodoService todoService;
     private final UserService userService;
 
+    Long actualUserId = null;
+
 
     @Autowired
     public TodoController(TodoRepository todoRepository, TodoService todoService, UserService userService) {
@@ -30,71 +32,51 @@ public class TodoController {
     }
 
     @GetMapping("/")
-    public String todoList(Model model) {
-        model.addAttribute("todos", todoRepository.findAllByUser_Id(Integer.toUnsignedLong(1)));
-        model.addAttribute("userName", userService.findUserById(Integer.toUnsignedLong(1)).getName());
+    public String todoList(Model model, @RequestParam Long user_id) {
+        actualUserId = user_id;
+        model.addAttribute("todos", todoRepository.findAllByUser_Id(user_id));
+        model.addAttribute("userName", userService.findUserById(user_id).getName());
+        model.addAttribute("userId", actualUserId);
         return "index";
     }
 
-
-    @GetMapping("/create")
-    public String createTodo(Model model, @RequestParam(required = false) String todo) {
-        if (todo != null) {
-            todoRepository.save(new Todo(todo, userService.findUserById(Integer.toUnsignedLong(1))));
-            model.addAttribute("todos", todoService.findAll());
-        } else {
-            todoRepository.save(new Todo());
-            model.addAttribute("todos", todoService.findAll());
-
-        }
-        return "index";
-    }
 
     @PostMapping("/add-todo")
-    public String setNutrition(Model model, @RequestParam String todo) {
+    public String addTodo(Model model, @RequestParam String todo) {
 
-        Todo newTodo = new Todo(todo, userService.findUserById(Integer.toUnsignedLong(1)));
+        Todo newTodo = new Todo(todo, userService.findUserById(actualUserId));
         todoRepository.save(newTodo);
-   /*     todoService.addUser_IdToTheLatestAddedTodo();
-        todoRepository.save(newTodo);*/
+
+        todoService.addUser_IdToTheLatestAddedTodo(actualUserId);
+        todoRepository.save(newTodo);
 
         model.addAttribute("todos", todoService.findAll());
 
-        return "redirect:/";
+        return "redirect:/?user_id=" + actualUserId;
     }
 
 
+    //Bug: this method delete both the selected Todo and the User.?!?!?!?!
     @GetMapping("/delete/{id}")
-    public String deleteTodo(Model model, @PathVariable Long id) {
-
+    public String deleteTodo(@PathVariable Long id) {
         todoRepository.deleteById(id);
-        //model.addAttribute("todos", todoRepository.findAll());
-        return "redirect:/";
-    }
-
-    @GetMapping("/list")
-    @ResponseBody
-    public Iterable<Todo> list(Model model) {
-        return todoService.findAll();
-    }
-
-    @GetMapping("/listbyid")
-    @ResponseBody
-    public Todo listById(@RequestParam Long id) {
-        return todoService.findTodoById(id);
-
+        return "redirect:/?user_id=" + actualUserId;
     }
 
 
     @GetMapping("/edit-todo/{id}")
     public String editTodo(Model model, @PathVariable Long id){
         model.addAttribute("todo", todoService.findTodoById(id));
+        //model.addAttribute("userName", userService.findUserById(user_id).getName());
 
         return "edit-todo";
     }
 
     @PostMapping("/update-todo/{id}")
-    public String updateTodo(@PathVariable("id") Long id, @ModelAttribute Todo todo){
+    public String updateTodo(@ModelAttribute Todo todo){
+
+        todoService.updateTodo(todo.getTodo(), todo.getDescription(), todo.isUrgent(), todo.isDone(),
+                todoRepository.findTodoById(todo.getId()));
 
    /*     logger.info("got here");
         logger.info ("title is: "+todo.getTodo());
@@ -106,15 +88,15 @@ public class TodoController {
         todoRepository.findTodoById(id).setDone(todo.isDone());*/
 
         //todoService.findTodoById(id).setUser(userService.findUserById(todoService.findTodoById(id).getUser().getId()));
-        todoRepository.save(todo);
+        //todoRepository.save(todo);
 
         //logger.info("finished update");
 
-        return "redirect:/";
+        return "redirect:/?user_id=" + actualUserId;
     }
 
     @GetMapping("/search")
-    public String search(Model model, @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+    public String searchTodo(Model model, @RequestParam(name = "keyword", defaultValue = "") String keyword) {
 
         logger.info ("keyword is: "+keyword);
         logger.info ("keyword is: "+todoService.getTodoContainsKeyWord(keyword));
@@ -122,5 +104,24 @@ public class TodoController {
 
         return "index";
     }
+
+    @GetMapping("/reset")
+    public String resetList() {
+        return "redirect:/?user_id=" + actualUserId;
+    }
+
+
+/*    @GetMapping("/list")
+    @ResponseBody
+    public Iterable<Todo> list(Model model) {
+        return todoService.findAll();
+    }
+
+    @GetMapping("/listbyid")
+    @ResponseBody
+    public Todo listById(@RequestParam Long id) {
+        return todoService.findTodoById(id);
+
+    }*/
 
 }

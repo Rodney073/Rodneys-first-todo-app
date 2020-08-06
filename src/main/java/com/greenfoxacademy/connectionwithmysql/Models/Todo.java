@@ -28,17 +28,18 @@ public class Todo {
     private Date createDate;
 
     @ManyToOne (cascade = {CascadeType.ALL})
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    //, insertable = false, updatable = false
 
-    public Todo(String title, User u) {
+    public Todo(String title, User user) {
         this.todo = title;
         this.urgent = false;
         this.done = false;
         this.description = "";
         this.createDate = new Date();
-        this.user = u;
+        this.user = user;
 
 
     }
