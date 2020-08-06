@@ -59,7 +59,8 @@ public class TodoController {
     //Bug: this method delete both the selected Todo and the User.?!?!?!?!
     @GetMapping("/delete/{id}")
     public String deleteTodo(@PathVariable Long id) {
-        todoRepository.deleteById(id);
+        Todo deleteTodo = todoRepository.findTodoById(id);
+        todoRepository.delete(deleteTodo);
         return "redirect:/?user_id=" + actualUserId;
     }
 
@@ -87,6 +88,7 @@ public class TodoController {
         logger.info ("keyword is: "+keyword);
         logger.info ("keyword is: "+todoService.getTodoContainsKeyWord(keyword));
         model.addAttribute("todos", todoService.getTodoContainsKeyWord(keyword));
+        model.addAttribute("userName", userService.findUserById(actualUserId).getName());
 
         return "index";
     }
