@@ -78,20 +78,6 @@ public class TodoController {
         todoService.updateTodo(todo.getTodo(), todo.getDescription(), todo.isUrgent(), todo.isDone(),
                 todoRepository.findTodoById(todo.getId()));
 
-   /*     logger.info("got here");
-        logger.info ("title is: "+todo.getTodo());
-        logger.info ("done is: "+todo.isDone());
-        logger.info ("urgent is: "+todo.isDone());
-        logger.info ("description is: "+todo.getDescription());
-        todoRepository.findTodoById(id).setTodo(todo.getTodo());
-        todoRepository.findTodoById(id).setUrgent(todo.isUrgent());
-        todoRepository.findTodoById(id).setDone(todo.isDone());*/
-
-        //todoService.findTodoById(id).setUser(userService.findUserById(todoService.findTodoById(id).getUser().getId()));
-        //todoRepository.save(todo);
-
-        //logger.info("finished update");
-
         return "redirect:/?user_id=" + actualUserId;
     }
 
@@ -123,5 +109,17 @@ public class TodoController {
         return todoService.findTodoById(id);
 
     }*/
+
+
+       /*     logger.info("got here");
+        logger.info ("title is: "+todo.getTodo());
+        logger.info ("done is: "+todo.isDone());
+        logger.info ("urgent is: "+todo.isDone());
+        logger.info ("description is: "+todo.getDescription());
+        todoRepository.findTodoById(id).setTodo(todo.getTodo());
+        todoRepository.findTodoById(id).setUrgent(todo.isUrgent());
+        todoRepository.findTodoById(id).setDone(todo.isDone());*/
+
+    //logger.info("finished update");
 
 }
