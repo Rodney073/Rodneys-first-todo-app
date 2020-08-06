@@ -1,8 +1,10 @@
 package com.greenfoxacademy.connectionwithmysql.Controllers;
 
 import com.greenfoxacademy.connectionwithmysql.Models.Todo;
+import com.greenfoxacademy.connectionwithmysql.Models.User;
 import com.greenfoxacademy.connectionwithmysql.Repositories.TodoRepository;
 import com.greenfoxacademy.connectionwithmysql.Service.TodoService;
+import com.greenfoxacademy.connectionwithmysql.Service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +17,22 @@ public class TodoController {
 
     private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
 
-    private TodoRepository todoRepository;
-
-    private TodoService todoService;
+    private final TodoRepository todoRepository;
+    private final TodoService todoService;
+    private final UserService userService;
 
 
     @Autowired
-    public TodoController(TodoRepository todoRepository, TodoService todoService) {
+    public TodoController(TodoRepository todoRepository, TodoService todoService, UserService userService) {
         this.todoRepository = todoRepository;
         this.todoService = todoService;
+        this.userService = userService;
     }
 
     @GetMapping("/")
     public String todoList(Model model) {
-        model.addAttribute("todos", todoRepository.findAll());
-
+        model.addAttribute("todos", todoRepository.findAllByUser_Id(Integer.toUnsignedLong(1)));
+        model.addAttribute("userName", userService.findUserById(Integer.toUnsignedLong(1)).getName());
         return "index";
     }
 
@@ -37,11 +40,11 @@ public class TodoController {
     @GetMapping("/create")
     public String createTodo(Model model, @RequestParam(required = false) String todo) {
         if (todo != null) {
-            todoRepository.save(new Todo(todo));
-            model.addAttribute("todos", todoRepository.findAll());
+            todoRepository.save(new Todo(todo, userService.findUserById(Integer.toUnsignedLong(1))));
+            model.addAttribute("todos", todoService.findAll());
         } else {
             todoRepository.save(new Todo());
-            model.addAttribute("todos", todoRepository.findAll());
+            model.addAttribute("todos", todoService.findAll());
 
         }
         return "index";
@@ -50,8 +53,12 @@ public class TodoController {
     @PostMapping("/add-todo")
     public String setNutrition(Model model, @RequestParam String todo) {
 
-        todoRepository.save(new Todo(todo));
-        model.addAttribute("todos", todoRepository.findAll());
+        Todo newTodo = new Todo(todo, userService.findUserById(Integer.toUnsignedLong(1)));
+        todoRepository.save(newTodo);
+   /*     todoService.addUser_IdToTheLatestAddedTodo();
+        todoRepository.save(newTodo);*/
+
+        model.addAttribute("todos", todoService.findAll());
 
         return "redirect:/";
     }
@@ -68,20 +75,20 @@ public class TodoController {
     @GetMapping("/list")
     @ResponseBody
     public Iterable<Todo> list(Model model) {
-        return todoRepository.findAll();
+        return todoService.findAll();
     }
 
     @GetMapping("/listbyid")
     @ResponseBody
     public Todo listById(@RequestParam Long id) {
-        return todoRepository.findTodoById(id);
+        return todoService.findTodoById(id);
 
     }
 
 
     @GetMapping("/edit-todo/{id}")
     public String editTodo(Model model, @PathVariable Long id){
-        model.addAttribute("todo", todoRepository.findTodoById(id));
+        model.addAttribute("todo", todoService.findTodoById(id));
 
         return "edit-todo";
     }
@@ -89,16 +96,19 @@ public class TodoController {
     @PostMapping("/update-todo/{id}")
     public String updateTodo(@PathVariable("id") Long id, @ModelAttribute Todo todo){
 
-        logger.info("got here");
+   /*     logger.info("got here");
         logger.info ("title is: "+todo.getTodo());
         logger.info ("done is: "+todo.isDone());
         logger.info ("urgent is: "+todo.isDone());
         logger.info ("description is: "+todo.getDescription());
-        //todoRepository.findTodoById(id).setTitle(todo.getTitle());
-        //todoRepository.findTodoById(id).setUrgent(todo.isUrgent());
-        //todoRepository.findTodoById(id).setDone(todo.isDone());
+        todoRepository.findTodoById(id).setTodo(todo.getTodo());
+        todoRepository.findTodoById(id).setUrgent(todo.isUrgent());
+        todoRepository.findTodoById(id).setDone(todo.isDone());*/
+
+        //todoService.findTodoById(id).setUser(userService.findUserById(todoService.findTodoById(id).getUser().getId()));
         todoRepository.save(todo);
-        logger.info("finished update");
+
+        //logger.info("finished update");
 
         return "redirect:/";
     }

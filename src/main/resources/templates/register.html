@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Trending</title>
+    <style>
+        body {
+            background-image: url("https://c.wallhere.com/photos/34/d0/stick_glow_black_reflection_background_dark_night_energy-1054343.jpg!d");
+
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            font-family: Verdana;
+        }
+        .login-container{
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+        .login-logo{
+            position: relative;
+            margin-left: -41.5%;
+        }
+        .login-logo img{
+            position: absolute;
+            width: 20%;
+            margin-top: 19%;
+            background: #282726;
+            border-radius: 4.5rem;
+            padding: 5%;
+        }
+        .login-form-1{
+            padding: 9%;
+            background:#282726;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+        }
+        .login-form-1 h3{
+            text-align: center;
+            margin-bottom:12%;
+            color:#fff;
+        }
+        .login-form-2{
+            padding: 9%;
+            background: #0e7993;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+        }
+        .login-form-2 h3{
+            text-align: center;
+            margin-bottom:12%;
+            color: #fff;
+        }
+        .btnSubmit{
+            font-weight: 600;
+            width: 50%;
+            color: #282726;
+            background-color: #fff;
+            border: none;
+            border-radius: 1.5rem;
+            padding:2%;
+        }
+        .btnForgetPwd{
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .btnForgetPwd:hover{
+            text-decoration:none;
+            color:#fff;
+        }
+        p{
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container login-container">
+    <div class="row">
+        <div class="col-md-6 login-form-1">
+            <h3>Sign Up</h3>
+            <form action="/register" method="post">
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" placeholder="Your Username *" value="" />
+                </div>
+               <!-- <div class="form-group">
+                    <input type="email" name="email" class="form-control" placeholder="Your Email *" value="" />
+                </div>-->
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="Your Password *" value="" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btnSubmit" value="Login" />
+                </div>
+            </form>
+            <p th:text="${text2}"></p>
+            <!--    <div class="form-group">
+                    <a href="#" class="btnForgetPwd">Forget Password?</a>
+                </div>-->
+
+        </div>
+        <div class="col-md-6 login-form-2">
+            <div class="login-logo">
+                <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
+            </div>
+            <h3>Sign In</h3>
+            <form action="/signIn" method="post">
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" placeholder=" Your Username *" value="" />
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="Your Password *" value="" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btnSubmit" value="Login" />
+                </div>
+            </form>
+            <p th:text="${text}"></p>
+            <!--      <div class="form-group">
+                      <a href="#" class="btnForgetPwd" value="Login">Forget Password?</a>
+                  </div>-->
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>
