@@ -1,8 +1,6 @@
 package com.greenfoxacademy.connectionwithmysql.Controllers;
 
 import com.greenfoxacademy.connectionwithmysql.Models.Todo;
-import com.greenfoxacademy.connectionwithmysql.Models.User;
-import com.greenfoxacademy.connectionwithmysql.Repositories.TodoRepository;
 import com.greenfoxacademy.connectionwithmysql.Service.TodoService;
 import com.greenfoxacademy.connectionwithmysql.Service.UserService;
 import org.slf4j.Logger;
@@ -15,9 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class TodoController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
+    //private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
 
-    private final TodoRepository todoRepository;
     private final TodoService todoService;
     private final UserService userService;
 
@@ -25,68 +22,64 @@ public class TodoController {
 
 
     @Autowired
-    public TodoController(TodoRepository todoRepository, TodoService todoService, UserService userService) {
-        this.todoRepository = todoRepository;
+    public TodoController(TodoService todoService, UserService userService) {
         this.todoService = todoService;
         this.userService = userService;
     }
 
+
     @GetMapping("/")
     public String todoList(Model model, @RequestParam Long user_id) {
         actualUserId = user_id;
-        model.addAttribute("todos", todoRepository.findAllByUser_Id(user_id));
+
+        model.addAttribute("todos", todoService.findAllByUser_Id(user_id));
         model.addAttribute("userName", userService.findUserById(user_id).getName());
-        model.addAttribute("userId", actualUserId);
+
         return "index";
     }
 
 
     @PostMapping("/add-todo")
-    public String addTodo(Model model, @RequestParam String todo) {
+    public String addTodo(@RequestParam String todo) {
 
         Todo newTodo = new Todo(todo, userService.findUserById(actualUserId));
-        todoRepository.save(newTodo);
-
         todoService.addUser_IdToTheLatestAddedTodo(actualUserId);
-        todoRepository.save(newTodo);
-
-        model.addAttribute("todos", todoService.findAll());
+        todoService.save(newTodo);
 
         return "redirect:/?user_id=" + actualUserId;
     }
 
 
-    //Bug: this method delete both the selected Todo and the User.?!?!?!?!
     @GetMapping("/delete/{id}")
     public String deleteTodo(@PathVariable Long id) {
-        Todo deleteTodo = todoRepository.findTodoById(id);
-        todoRepository.delete(deleteTodo);
+
+        todoService.deleteById(id);
+
         return "redirect:/?user_id=" + actualUserId;
     }
 
 
     @GetMapping("/edit-todo/{id}")
-    public String editTodo(Model model, @PathVariable Long id){
+    public String editTodo(Model model, @PathVariable Long id) {
+
         model.addAttribute("todo", todoService.findTodoById(id));
-        //model.addAttribute("userName", userService.findUserById(user_id).getName());
 
         return "edit-todo";
     }
 
     @PostMapping("/update-todo/{id}")
-    public String updateTodo(@ModelAttribute Todo todo){
+    public String updateTodo(@ModelAttribute Todo todo) {
 
         todoService.updateTodo(todo.getTodo(), todo.getDescription(), todo.isUrgent(), todo.isDone(),
-                todoRepository.findTodoById(todo.getId()));
+                todoService.findTodoById(todo.getId()));
 
         return "redirect:/?user_id=" + actualUserId;
     }
 
+
     @GetMapping("/search")
     public String searchTodo(Model model, @RequestParam(name = "keyword", defaultValue = "") String keyword) {
 
-        logger.info ("keyword is: "+keyword);
-        logger.info ("keyword is: "+todoService.getTodoContainsKeyWord(keyword));
         model.addAttribute("todos", todoService.getTodoContainsKeyWord(keyword));
         model.addAttribute("userName", userService.findUserById(actualUserId).getName());
 
@@ -97,6 +90,8 @@ public class TodoController {
     public String resetList() {
         return "redirect:/?user_id=" + actualUserId;
     }
+
+
 
 
 /*    @GetMapping("/list")
@@ -110,10 +105,14 @@ public class TodoController {
     public Todo listById(@RequestParam Long id) {
         return todoService.findTodoById(id);
 
-    }*/
+    }
+
+        logger.info("got here");
+
+        logger.info("keyword is: " + keyword);
+        logger.info("keyword is: " + todoService.getTodoContainsKeyWord(keyword));
 
 
-       /*     logger.info("got here");
         logger.info ("title is: "+todo.getTodo());
         logger.info ("done is: "+todo.isDone());
         logger.info ("urgent is: "+todo.isDone());

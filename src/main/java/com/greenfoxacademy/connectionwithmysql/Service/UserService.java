@@ -23,7 +23,6 @@ public class UserService {
 
     public Optional<User> findUserByName(String name) {
         return userRepository.findUserByName(name);
-
     }
 
     public boolean isPasswordOk(String name, String password) {
@@ -35,5 +34,10 @@ public class UserService {
     public Long getUserId(String name) {
         return userRepository.findUserByName(name).get().getId();
     }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
 
 }

@@ -27,11 +27,9 @@ public class Todo {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    @ManyToOne (cascade = {CascadeType.ALL})
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
-
-    //, insertable = false, updatable = false
 
     public Todo(String title, User user) {
         this.todo = title;
@@ -40,8 +38,6 @@ public class Todo {
         this.description = "";
         this.createDate = new Date();
         this.user = user;
-
-
     }
 
 }

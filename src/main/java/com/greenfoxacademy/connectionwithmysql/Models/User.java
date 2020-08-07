@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class User {
     private String name;
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private List<Todo> posts;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    private Set<Todo> todos = new HashSet<>();
 
 }
